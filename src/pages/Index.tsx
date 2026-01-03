@@ -41,7 +41,7 @@ const Index: React.FC = () => {
       labelHi: 'लक्षण ट्रैकर',
       descHi: 'अपनी तकलीफ लिखें',
       descEn: 'Record your symptoms',
-      color: 'bg-gradient-to-br from-rose-500 to-pink-600',
+      color: 'bg-gradient-to-br from-red-950 via-rose-800 to-rose-400',
       image: '🩺',
     },
     {
@@ -51,7 +51,7 @@ const Index: React.FC = () => {
       labelHi: 'स्वास्थ्य सुझाव',
       descHi: 'सरल स्वास्थ्य टिप्स',
       descEn: 'Simple health tips',
-      color: 'bg-gradient-to-br from-amber-500 to-orange-600',
+      color: 'bg-gradient-to-br from-orange-900 via-orange-600 to-amber-400',
       image: '💡',
     },
     {
@@ -61,7 +61,7 @@ const Index: React.FC = () => {
       labelHi: 'दवाई दुकान',
       descHi: 'सस्ती दवाइयां खरीदें',
       descEn: 'Buy affordable medicines',
-      color: 'bg-gradient-to-br from-emerald-500 to-teal-600',
+      color: 'bg-gradient-to-br from-slate-900 via-emerald-700 to-teal-400',
       image: '💊',
     },
     {
@@ -71,7 +71,7 @@ const Index: React.FC = () => {
       labelHi: 'AI सहायक',
       descHi: 'स्वास्थ्य मार्गदर्शन',
       descEn: 'Health guidance',
-      color: 'bg-gradient-to-br from-blue-500 to-indigo-600',
+      color: 'bg-gradient-to-br from-slate-900 via-blue-600 to-pink-100', 
       image: '🤖',
     },
     {
@@ -81,7 +81,7 @@ const Index: React.FC = () => {
       labelHi: 'सरकारी योजना',
       descHi: 'मुफ्त स्वास्थ्य सेवाएं',
       descEn: 'Free health services',
-      color: 'bg-gradient-to-br from-purple-500 to-violet-600',
+      color: 'bg-gradient-to-br from-slate-900 via-cyan-700 to-sky-400',
       image: '🏛️',
     },
     {
@@ -91,7 +91,7 @@ const Index: React.FC = () => {
       labelHi: 'नजदीकी अस्पताल',
       descHi: 'अस्पताल खोजें',
       descEn: 'Find hospitals',
-      color: 'bg-gradient-to-br from-cyan-500 to-sky-600',
+      color: 'bg-gradient-to-br from-slate-900 via-purple-700 to-purple-400',
       image: '🏥',
     },
   ];
@@ -163,7 +163,7 @@ const Index: React.FC = () => {
             <Link key={feature.path} to={feature.path}>
               <Card className="border-2 border-border hover:shadow-xl transition-all hover:-translate-y-2 h-full group overflow-hidden">
                 <CardContent className="p-0">
-                  <div className={`${feature.color} p-6 text-center`}>
+                  <div className={`${feature.color} p-7 text-center`}>
                     <span className="text-5xl block mb-2">{feature.image}</span>
                     <feature.icon className="w-8 h-8 mx-auto text-primary-foreground" />
                   </div>
@@ -172,7 +172,7 @@ const Index: React.FC = () => {
                     <p className="text-sm text-muted-foreground">
                       {language === 'hi' ? feature.descHi : feature.descEn}
                     </p>
-                    <div className="mt-3 flex items-center justify-center text-primary font-medium text-sm group-hover:gap-2 transition-all">
+                    <div className="mt-4 flex items-center justify-center text-primary font-large text-base group-hover:gap-2 transition-all">
                       {language === 'hi' ? 'खोलें' : 'Open'}
                       <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
