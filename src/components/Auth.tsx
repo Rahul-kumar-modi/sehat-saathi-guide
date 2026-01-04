@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
-import { Heart, Mail, Lock, User, Phone, Loader2, Shield } from 'lucide-react';
+import { Heart, Mail, Lock, User, Phone, Loader2, Shield, Eye, EyeOff } from 'lucide-react';
 
 const Auth: React.FC = () => {
   const { t, language } = useLanguage();
@@ -19,6 +19,8 @@ const Auth: React.FC = () => {
   const [registerData, setRegisterData] = useState({ name: '', email: '', phone: '', password: '' });
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,6 +53,14 @@ const Auth: React.FC = () => {
     } else {
       toast.error(language === 'hi' ? 'गलत OTP' : 'Invalid OTP');
     }
+  };
+
+  const toggleLoginPasswordVisibility = () => {
+    setShowLoginPassword(!showLoginPassword);
+  };
+
+  const toggleRegisterPasswordVisibility = () => {
+    setShowRegisterPassword(!showRegisterPassword);
   };
 
   if (pendingVerification) {
@@ -165,13 +175,27 @@ const Auth: React.FC = () => {
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
                     <Input 
                       id="login-password"
-                      type="password" 
+                      type={showLoginPassword ? "text" : "password"} 
                       value={loginData.password} 
                       onChange={(e) => setLoginData(p => ({...p, password: e.target.value}))} 
-                      className="pl-11 h-12 border-2 focus-visible:ring-2 focus-visible:ring-primary transition-all" 
+                      className="pl-11 pr-10 h-12 border-2 focus-visible:ring-2 focus-visible:ring-primary transition-all" 
                       placeholder="••••••••"
                       required
                     />
+                    <button
+                      type="button"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      onClick={toggleLoginPasswordVisibility}
+                      aria-label={showLoginPassword ? 
+                        (language === 'hi' ? 'पासवर्ड छिपाएं' : 'Hide password') : 
+                        (language === 'hi' ? 'पासवर्ड दिखाएं' : 'Show password')}
+                    >
+                      {showLoginPassword ? (
+                        <EyeOff className="w-5 h-5" />
+                      ) : (
+                        <Eye className="w-5 h-5" />
+                      )}
+                    </button>
                   </div>
                 </div>
                 
@@ -255,13 +279,27 @@ const Auth: React.FC = () => {
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
                     <Input 
                       id="register-password"
-                      type="password" 
+                      type={showRegisterPassword ? "text" : "password"} 
                       value={registerData.password} 
                       onChange={(e) => setRegisterData(p => ({...p, password: e.target.value}))} 
-                      className="pl-11 h-12 border-2 focus-visible:ring-2 focus-visible:ring-primary transition-all" 
+                      className="pl-11 pr-10 h-12 border-2 focus-visible:ring-2 focus-visible:ring-primary transition-all" 
                       placeholder="••••••••"
                       required
                     />
+                    <button
+                      type="button"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      onClick={toggleRegisterPasswordVisibility}
+                      aria-label={showRegisterPassword ? 
+                        (language === 'hi' ? 'पासवर्ड छिपाएं' : 'Hide password') : 
+                        (language === 'hi' ? 'पासवर्ड दिखाएं' : 'Show password')}
+                    >
+                      {showRegisterPassword ? (
+                        <EyeOff className="w-5 h-5" />
+                      ) : (
+                        <Eye className="w-5 h-5" />
+                      )}
+                    </button>
                   </div>
                 </div>
                 
