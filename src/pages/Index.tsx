@@ -19,6 +19,14 @@ import {
   Users,
   Clock,
   ArrowRight,
+  Stethoscope,
+  Pill,
+  Bot,
+  Hospital,
+  Shield as ShieldIcon,
+  Droplets,
+  AlertTriangle,
+  HeartPulse,
 } from 'lucide-react';
 
 const Index: React.FC = () => {
@@ -41,8 +49,8 @@ const Index: React.FC = () => {
       labelHi: 'लक्षण ट्रैकर',
       descHi: 'अपनी तकलीफ लिखें',
       descEn: 'Record your symptoms',
-      color: 'bg-gradient-to-br from-red-950 via-rose-800 to-rose-400',
-      image: '🩺',
+      color: 'bg-gradient-to-br from-rose-500 to-pink-600',
+      iconComponent: Stethoscope,
     },
     {
       path: '/tips',
@@ -51,8 +59,8 @@ const Index: React.FC = () => {
       labelHi: 'स्वास्थ्य सुझाव',
       descHi: 'सरल स्वास्थ्य टिप्स',
       descEn: 'Simple health tips',
-      color: 'bg-gradient-to-br from-orange-900 via-orange-600 to-amber-400',
-      image: '💡',
+      color: 'bg-gradient-to-br from-amber-500 to-orange-600',
+      iconComponent: Lightbulb,
     },
     {
       path: '/store',
@@ -61,8 +69,8 @@ const Index: React.FC = () => {
       labelHi: 'दवाई दुकान',
       descHi: 'सस्ती दवाइयां खरीदें',
       descEn: 'Buy affordable medicines',
-      color: 'bg-gradient-to-br from-slate-900 via-emerald-700 to-teal-400',
-      image: '💊',
+      color: 'bg-gradient-to-br from-emerald-500 to-teal-600',
+      iconComponent: Pill,
     },
     {
       path: '/assistant',
@@ -71,8 +79,8 @@ const Index: React.FC = () => {
       labelHi: 'AI सहायक',
       descHi: 'स्वास्थ्य मार्गदर्शन',
       descEn: 'Health guidance',
-      color: 'bg-gradient-to-br from-slate-900 via-blue-600 to-pink-100', 
-      image: '🤖',
+      color: 'bg-gradient-to-br from-blue-500 to-indigo-600',
+      iconComponent: Bot,
     },
     {
       path: '/schemes',
@@ -81,8 +89,8 @@ const Index: React.FC = () => {
       labelHi: 'सरकारी योजना',
       descHi: 'मुफ्त स्वास्थ्य सेवाएं',
       descEn: 'Free health services',
-      color: 'bg-gradient-to-br from-slate-900 via-cyan-700 to-sky-400',
-      image: '🏛️',
+      color: 'bg-gradient-to-br from-purple-500 to-violet-600',
+      iconComponent: ShieldIcon,
     },
     {
       path: '/nearby',
@@ -91,8 +99,8 @@ const Index: React.FC = () => {
       labelHi: 'नजदीकी अस्पताल',
       descHi: 'अस्पताल खोजें',
       descEn: 'Find hospitals',
-      color: 'bg-gradient-to-br from-slate-900 via-purple-700 to-purple-400',
-      image: '🏥',
+      color: 'bg-gradient-to-br from-cyan-500 to-sky-600',
+      iconComponent: Hospital,
     },
   ];
 
@@ -110,10 +118,10 @@ const Index: React.FC = () => {
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary via-primary to-chart-2 text-primary-foreground py-16 px-4 overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 text-8xl">💚</div>
-          <div className="absolute top-20 right-20 text-6xl">🏥</div>
-          <div className="absolute bottom-10 left-1/4 text-7xl">💊</div>
-          <div className="absolute bottom-20 right-10 text-5xl">🩺</div>
+          <HeartPulse className="absolute top-10 left-10 w-32 h-32 text-primary-foreground/20" />
+          <Hospital className="absolute top-20 right-20 w-24 h-24 text-primary-foreground/20" />
+          <Pill className="absolute bottom-10 left-1/4 w-28 h-28 text-primary-foreground/20" />
+          <Stethoscope className="absolute bottom-20 right-10 w-20 h-20 text-primary-foreground/20" />
         </div>
         
         <div className="container mx-auto text-center relative z-10">
@@ -163,9 +171,8 @@ const Index: React.FC = () => {
             <Link key={feature.path} to={feature.path}>
               <Card className="border-2 border-border hover:shadow-xl transition-all hover:-translate-y-2 h-full group overflow-hidden">
                 <CardContent className="p-0">
-                  <div className={`${feature.color} p-7 text-center`}>
-                    <span className="text-5xl block mb-2">{feature.image}</span>
-                    <feature.icon className="w-8 h-8 mx-auto text-primary-foreground" />
+                  <div className={`${feature.color} p-6 text-center`}>
+                    <feature.iconComponent className="w-12 h-12 mx-auto text-primary-foreground" />
                   </div>
                   <div className="p-4 text-center">
                     <h3 className="font-bold text-foreground mb-1">{feature.label}</h3>
@@ -188,7 +195,7 @@ const Index: React.FC = () => {
       <section className="container mx-auto px-4 pb-12">
         <Card className="border-2 border-border bg-gradient-to-r from-secondary to-muted overflow-hidden">
           <CardContent className="p-6 flex items-center gap-4">
-            <div className="text-5xl">💡</div>
+            <Lightbulb className="w-14 h-14 text-foreground" />
             <div className="flex-1">
               <h3 className="font-bold text-foreground mb-1">
                 {language === 'hi' ? 'आज का स्वास्थ्य सुझाव' : 'Today\'s Health Tip'}
@@ -199,7 +206,7 @@ const Index: React.FC = () => {
                   : 'Drink at least 8 glasses of water daily. It keeps your body healthy.'}
               </p>
             </div>
-            <span className="text-4xl hidden md:block">💧</span>
+            <Droplets className="w-12 h-12 hidden md:block text-foreground" />
           </CardContent>
         </Card>
       </section>
@@ -209,7 +216,7 @@ const Index: React.FC = () => {
         <Card className="border-2 border-destructive bg-destructive/10">
           <CardContent className="p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="text-3xl">🚨</span>
+              <AlertTriangle className="w-8 h-8 text-destructive" />
               <div>
                 <h4 className="font-bold text-destructive">
                   {language === 'hi' ? 'आपातकालीन नंबर' : 'Emergency Number'}

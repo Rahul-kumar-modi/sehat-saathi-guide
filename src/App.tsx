@@ -84,13 +84,14 @@ const ScrollToTopButton = () => {
 const App = () => {
   const [loading, setLoading] = useState(true);
 
-  // 🔽 TEMPORARY TEST (safe place)
-  const test = evaluateSymptoms({
-    symptoms: ["chest pain", "shortness of breath"]
-  });
+  useEffect(() => {
+    // Simulate loading completion after a short delay
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
 
-  console.log("Triage test:", test);
-  // 🔼 TEMPORARY TEST
+    return () => clearTimeout(timer);
+  }, []);
 
   if (loading) {
     return <LoadingScreen onComplete={() => setLoading(false)} />;
