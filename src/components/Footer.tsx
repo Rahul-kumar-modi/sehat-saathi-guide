@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
     return (
         <footer className="bg-card border-t border-border mt-auto">
             <div className="container mx-auto px-4 py-12">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
                     {/* Brand Section */}
                     <div className="space-y-4">
                         <Link to="/" className="flex items-center gap-2">
@@ -149,8 +149,46 @@ const Footer: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                </div>
+                    {/* Our Location */}
+                    <div className="space-y-4">
+                        <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                        <MapPin className="w-5 h-5 text-primary" />
+                        Our Location
+                        </h3>
 
+                        {/* Map Embed */}
+                        <div className="rounded-lg overflow-hidden border border-border">
+                            <iframe
+                            title="IIT Madras Location"
+                            src="https://www.openstreetmap.org/export/embed.html?bbox=80.2245%2C12.9875%2C80.2375%2C12.9995&layer=mapnik&marker=12.9935%2C80.2310"
+                            className="w-full h-40"
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            />
+                        </div>
+
+                        {/* Address */}
+                        <div className="text-sm text-muted-foreground space-y-1">
+                            <p className="font-medium text-foreground">
+                            Inspired by SAATHI Initiative
+                            </p>
+                            <p>Indian Institute of Technology Madras</p>
+                            <p>Chennai, Tamil Nadu – 600036</p>
+                            <p>India</p>
+                        </div>
+
+                        {/* Directions */}
+                        <a
+                        href="https://www.google.com/maps?q=IIT+Madras"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                        >
+                        <MapPin className="w-4 h-4" />
+                        Get Directions →
+                    </a>
+                </div>
+            </div>
                 <div className="border-t border-border mt-12 pt-8 text-center text-sm text-muted-foreground">
                     <p>© {new Date().getFullYear()} {t.appName}. {t.rightsReserved}.</p>
                 </div>
