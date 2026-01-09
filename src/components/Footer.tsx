@@ -1,15 +1,114 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 const Footer: React.FC = () => {
     const { t } = useLanguage();
+    const { toast } = useToast();
+    const [email, setEmail] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const validateEmail = (email: string): boolean => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const handleNewsletterSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        
+        if (!email.trim()) {
+            toast({
+                variant: "destructive",
+                title: t.subscribeError,
+                description: t.invalidEmail,
+            });
+            return;
+        }
+
+        if (!validateEmail(email)) {
+            toast({
+                variant: "destructive",
+                title: t.subscribeError,
+                description: t.invalidEmail,
+            });
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        try {
+            // Simulate API call - Replace with actual backend integration
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Store in localStorage as a temporary solution
+            const subscribers = JSON.parse(localStorage.getItem('newsletterSubscribers') || '[]');
+            
+            if (subscribers.includes(email)) {
+                toast({
+                    variant: "destructive",
+                    title: "Already Subscribed",
+                    description: "This email is already subscribed to our newsletter.",
+                });
+            } else {
+                subscribers.push(email);
+                localStorage.setItem('newsletterSubscribers', JSON.stringify(subscribers));
+                
+                toast({
+                    title: t.subscribeSuccess,
+                    description: "You'll receive our latest health tips and updates.",
+                });
+                
+                setEmail('');
+            }
+        } catch (error) {
+            toast({
+                variant: "destructive",
+                title: t.subscribeError,
+                description: "Something went wrong. Please try again.",
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     return (
         <footer className="bg-card border-t border-border mt-auto">
             <div className="container mx-auto px-4 py-12">
+                {/* Newsletter Section */}
+                <div className="mb-12 max-w-2xl mx-auto">
+                    <div className="bg-gradient-to-r from-primary/10 to-chart-2/10 rounded-2xl p-8 border border-primary/20">
+                        <div className="text-center mb-6">
+                            <h3 className="font-bold text-2xl mb-2 text-foreground">
+                                {t.newsletterTitle}
+                            </h3>
+                            <p className="text-muted-foreground text-sm">
+                                Stay updated with our latest health tips and features.
+                            </p>
+                        </div>
+                        <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3">
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder={t.newsletterPlaceholder}
+                                className="flex-1 px-4 py-3 rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                                disabled={isSubmitting}
+                            />
+                            <Button 
+                                type="submit"
+                                size="lg"
+                                disabled={isSubmitting}
+                                className="sm:w-auto w-full font-semibold"
+                            >
+                                {isSubmitting ? 'Subscribing...' : t.subscribe}
+                            </Button>
+                        </form>
+                    </div>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {/* Brand Section */}
                     <div className="space-y-4">
@@ -131,23 +230,6 @@ const Footer: React.FC = () => {
                                 </Link>
                             </li>
                         </ul>
-
-                        <div className="mt-6 p-4 bg-muted/50 rounded-lg">
-                            <h4 className="font-medium text-sm mb-2">{t.followUs}</h4>
-                            <p className="text-xs text-muted-foreground">
-                                Stay updated with our latest health tips and features.
-                            </p>
-                            <div className="mt-3 flex gap-2">
-                                <input
-                                    type="email"
-                                    placeholder={t.email}
-                                    className="px-3 py-1.5 rounded-md border text-sm w-full bg-background"
-                                />
-                                <Button size="sm" variant="default">
-                                    {t.send}
-                                </Button>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
