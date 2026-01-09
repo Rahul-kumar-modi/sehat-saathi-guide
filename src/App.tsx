@@ -25,6 +25,7 @@ import Cart from '@/components/Cart';
 import Checkout from '@/components/Checkout';
 import Auth from '@/components/Auth';
 import Profile from '@/components/Profile';
+import EditProfile from '@/pages/EditProfile';
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsConditions from "./pages/TermsConditions";
@@ -131,6 +132,7 @@ const App = () => {
                       <Route path="/checkout" element={<Checkout />} />
                       <Route path="/auth" element={<Auth />} />
                       <Route path="/profile" element={<Profile />} />
+                      <Route path="/edit-profile" element={<EditProfile />} />
                       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                       <Route path="/terms-and-conditions" element={<TermsConditions />} />
                       <Route path="/reminders" element={<Reminders />} />

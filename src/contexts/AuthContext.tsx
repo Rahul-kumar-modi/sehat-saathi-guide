@@ -5,6 +5,7 @@ interface User {
   name: string;
   email: string;
   phone: string;
+  profilePic?: string;
 }
 
 interface AuthContextType {
@@ -15,6 +16,7 @@ interface AuthContextType {
   verifyOtp: (otp: string) => Promise<boolean>;
   logout: () => void;
   pendingVerification: boolean;
+  updateProfile: (updatedUser: User) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -60,13 +62,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
     return false;
   };
-
+  
   const register = async (name: string, email: string, phone: string, password: string): Promise<boolean> => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setTempUserData({ name, email, phone });
     setPendingVerification(true);
     return true;
   };
+  
 
   const verifyOtp = async (otp: string): Promise<boolean> => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -102,6 +105,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.removeItem('user');
   };
 
+  const updateProfile = async (updatedUser: User) => {
+    setUser(updatedUser);
+    // Update in localStorage
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    
+    // Update in registeredUsers list if needed
+    try {
+      const savedUsers = localStorage.getItem('registeredUsers');
+      let users = savedUsers ? JSON.parse(savedUsers) : [];
+      
+      // Find and update the user in the list
+      const userIndex = users.findIndex((u: User) => u.id === updatedUser.id);
+      if (userIndex !== -1) {
+        users[userIndex] = updatedUser;
+        localStorage.setItem('registeredUsers', JSON.stringify(users));
+      }
+    } catch (error) {
+      console.error('Error updating user in registeredUsers:', error);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -112,6 +136,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         verifyOtp,
         logout,
         pendingVerification,
+        updateProfile,
       }}
     >
       {children}
