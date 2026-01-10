@@ -29,9 +29,6 @@ import {
   Building,
   ChevronDown,
   Zap,
-  Shield,
-  Hospital,
-  Settings,
   Moon,
   Sun,
   MapPin,
@@ -39,7 +36,8 @@ import {
   Lightbulb,
   Store,
   MessageCircle,
-  Home
+  Home,
+  FileText
 } from 'lucide-react';
 
 const Navbar: React.FC = () => {
@@ -52,6 +50,7 @@ const Navbar: React.FC = () => {
   const [selectedPincode, setSelectedPincode] = useState('Select Pincode');
   const [pincodeOpen, setPincodeOpen] = useState(false);
 
+  // Determine dark mode state for toggle logic
   const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
   const toggleTheme = () => {
@@ -60,6 +59,7 @@ const Navbar: React.FC = () => {
 
   const navItems = [
     { path: '/', label: t.home, icon: Home },
+    ...(isAuthenticated ? [{ path: '/dashboard', label: 'Dashboard', icon: Activity }] : []),
     { path: '/symptoms', label: t.symptomTracker, icon: Activity },
     { path: '/tips', label: t.healthTips, icon: Lightbulb },
     { path: '/store', label: t.medicineStore, icon: Store },
@@ -67,10 +67,8 @@ const Navbar: React.FC = () => {
     { path: '/schemes', label: t.schemes, icon: Building },
     { path: '/nearby', label: t.nearbyHospitals, icon: MapPin },
     { path: '/reminders', label: 'Reminders', icon: '⏰' },
+    { path: '/medical-history', label: 'Medical History', icon: FileText },
   ];
-
-  // Extra items if we want a "More" menu, but for now I'll keep it simple or use the bottom bar logic if needed.
-  // The original conflicted file had "moreItems" but the main nav covered most things.
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -128,12 +126,6 @@ const Navbar: React.FC = () => {
 
             {/* Right Side Actions */}
             <div className="flex items-center gap-2 sm:gap-4">
-
-              {/* Offers */}
-              <Button variant="ghost" size="sm" className="gap-2 hidden lg:flex">
-                <Settings className="w-4 h-4" />
-                <span>Offers</span>
-              </Button>
 
               {/* Language Selector */}
               <DropdownMenu>
@@ -198,6 +190,11 @@ const Navbar: React.FC = () => {
                         <User className="w-4 h-4" /> {t.myProfile}
                       </Link>
                     </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/dashboard" className="cursor-pointer gap-2">
+                        <Activity className="w-4 h-4" /> Dashboard
+                      </Link>
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={logout} className="text-destructive cursor-pointer gap-2">
                       <LogOut className="w-4 h-4" /> {t.logout}
                     </DropdownMenuItem>
@@ -241,7 +238,7 @@ const Navbar: React.FC = () => {
                     )}
 
                     {navItems.map((item) => {
-                      const Icon = typeof item.icon === 'string' ? Activity : item.icon; // Fallback if string type still lingering
+                      const Icon = typeof item.icon === 'string' ? Activity : item.icon;
                       const isStrIcon = typeof item.icon === 'string';
 
                       return (

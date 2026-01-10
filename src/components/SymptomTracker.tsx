@@ -8,9 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Plus, Trash2, Calendar, Clock, FileText } from "lucide-react";
+import { Plus, Trash2, Calendar, Clock, FileText, Download } from "lucide-react";
+import VoiceInput from "@/components/VoiceInput";
 
-import { Download } from "lucide-react";
 import { exportToCSV, exportToPDF } from "@/lib/exportUtils";
 import {
   DropdownMenu,
@@ -39,10 +39,14 @@ const severityStyles = {
 
 const SymptomTracker: React.FC = () => {
   const { t, language } = useLanguage();
- console.log("CURRENT LANGUAGE:", language);
   const [symptoms, setSymptoms] = useState<Symptom[]>(() => {
     const saved = localStorage.getItem("symptoms");
-    return saved ? JSON.parse(saved) : [];
+    try {
+      return saved ? JSON.parse(saved) : [];
+    } catch (error) {
+      console.error("Error parsing symptoms from localStorage:", error);
+      return [];
+    }
   });
 
   const [triageResult, setTriageResult] = useState<TriageResult | null>(null);
@@ -227,26 +231,41 @@ const handleExportPDF = () => {
         </CardHeader>
 
         <CardContent className="space-y-4 pt-6">
-          <Input
-            value={newSymptom}
-            onChange={(e) => {
-              setNewSymptom(e.target.value);
-              if (error) setError("");
-            }}
-            onKeyPress={handleKeyPress}
-            placeholder={t.symptomName}
-            className={`border-2 ${
-              error ? "border-destructive" : "border-input"
-            }`}
-          />
+          <div className="flex gap-2">
+            <Input
+              value={newSymptom}
+              onChange={(e) => {
+                setNewSymptom(e.target.value);
+                if (error) setError("");
+              }}
+              onKeyPress={handleKeyPress}
+              placeholder={t.symptomName}
+              className={`flex-1 border-2 ${
+                error ? "border-destructive" : "border-input"
+              }`}
+            />
+            <VoiceInput
+              onTranscript={(text) => {
+                setNewSymptom(text);
+                if (error) setError("");
+              }}
+            />
+          </div>
 
           {error && <p className="text-destructive text-sm">{error}</p>}
 
-          <Textarea
-            value={newDescription}
-            onChange={(e) => setNewDescription(e.target.value)}
-            placeholder={t.symptomDescription}
-          />
+          <div className="flex gap-2">
+            <Textarea
+              value={newDescription}
+              onChange={(e) => setNewDescription(e.target.value)}
+              placeholder={t.symptomDescription}
+              className="flex-1"
+            />
+            <VoiceInput
+              onTranscript={(text) => setNewDescription(prev => prev ? `${prev} ${text}` : text)}
+              className="self-start mt-2"
+            />
+          </div>
 
           <Button onClick={handleAdd} className="w-full gap-2">
             <Plus /> {t.addSymptom}

@@ -3,11 +3,10 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import AsyncErrorFallback from "@/components/AsyncErrorFallback";
-import { MapPin, Navigation, Phone, Clock } from 'lucide-react';
+import { MapPin, Navigation, Phone, Clock, CalendarPlus } from 'lucide-react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import AsyncErrorFallback from "@/components/AsyncErrorFallback";
-
+import AppointmentBooking from './AppointmentBooking';
 
 interface Hospital {
   id: string;
@@ -88,7 +87,7 @@ const SIMULATE_API_FAILURE = false;
 
 async function fetchNearbyHospitals(lat: number, lng: number): Promise<Hospital[]> {
   if (SIMULATE_API_FAILURE) {
-    
+
   }
 
 
@@ -160,13 +159,15 @@ async function fetchNearbyHospitals(lat: number, lng: number): Promise<Hospital[
 
 const NearbyHospitals: React.FC = () => {
   const { t, language } = useLanguage();
-  
+
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isLoadingLocation, setIsLoadingLocation] = useState(true);
   const [hospitals, setHospitals] = useState<Hospital[]>(mockHospitals);
   const [isLoadingHospitals, setIsLoadingHospitals] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+  const [selectedHospital, setSelectedHospital] = useState<Hospital | null>(null);
+  const [bookingOpen, setBookingOpen] = useState(false);
+
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
 
@@ -177,7 +178,7 @@ const NearbyHospitals: React.FC = () => {
 
     try {
       const fetchedHospitals = await fetchNearbyHospitals(location.lat, location.lng);
-      
+
       if (fetchedHospitals.length > 0) {
         setHospitals(fetchedHospitals);
       }
@@ -202,10 +203,10 @@ const NearbyHospitals: React.FC = () => {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         };
-        
+
         setUserLocation(location);
         setIsLoadingLocation(false);
-        
+
         await loadHospitals(location);
       },
       (err) => {
@@ -395,11 +396,32 @@ const NearbyHospitals: React.FC = () => {
                       {language === 'hi' ? 'कॉल करें' : 'Call'}
                     </Button>
                   </div>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    className="w-full gap-2 mt-2"
+                    onClick={() => {
+                      setSelectedHospital(hospital);
+                      setBookingOpen(true);
+                    }}
+                  >
+                    <CalendarPlus className="w-4 h-4" />
+                    {language === 'hi' ? 'अपॉइंटमेंट बुक करें' : 'Book Appointment'}
+                  </Button>
                 </CardContent>
               </Card>
             ))}
           </div>
         </>
+      )}
+
+      {/* Appointment Booking Dialog */}
+      {selectedHospital && (
+        <AppointmentBooking
+          hospital={selectedHospital}
+          open={bookingOpen}
+          onOpenChange={setBookingOpen}
+        />
       )}
     </div>
   );
